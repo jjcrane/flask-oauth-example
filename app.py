@@ -57,7 +57,7 @@ app.config['OAUTH2_PROVIDERS'] = {
         'token_url': 'https://graph.facebook.com/oauth/access_token',
         'userinfo': {
             'url': 'https://graph.facebook.com/me?fields=email',
-            'email': lambda json: json[0]['email'],
+            'id': lambda json: json['id'],
         },
         'scopes': ['email'],
     },
@@ -174,8 +174,13 @@ def oauth2_callback(provider):
     if response.status_code != 200:
         abort(401)
 
-    print(response.json())
-    #email = provider_data['userinfo']['email'](response.json())
+    if provider == 'facebook':
+        print(response.json())
+        id = provider_data['userinfo']['id'](response.json())
+        print(id)
+        #email = provider_data['userinfo']['email'](response.json())
+    else:
+        email = provider_data['userinfo']['email'](response.json())
 
     # find or create the user in the database
     user = db.session.scalar(db.select(User).where(User.email == email))
