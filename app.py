@@ -11,7 +11,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 import requests
 
-dotenv_path = Path('/opt/flask-oauth-example/env/.env)
+dotenv_path = Path('/opt/flask-oauth-example/env/.env')
 load_dotenv(dotenv_path=dotenv_path)
 
 
