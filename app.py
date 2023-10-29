@@ -2,7 +2,8 @@ import os
 import secrets
 from urllib.parse import urlencode
 from pathlib import Path
-
+from datetime import datetime, timedelta
+import jwt
 from dotenv import load_dotenv
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
     current_app, request
@@ -122,7 +123,7 @@ def oauth2_authorize(provider):
             'state': session['oauth2_state'],
         })
 
-    # redirect the user to the OAuth2 provider authorization URL
+    # redirect the user to the OAuth2 provider authorization URL    
     return redirect(provider_data['authorize_url'] + '?' + qs)
 
 
@@ -184,6 +185,13 @@ def oauth2_callback(provider):
         db.session.commit()
 
     # log the user in
+
+    token = jwt.encode({
+        'public_id': user.email,
+        'exp' : datetime.utcnow() + timedelta(minutes = 30)
+        }, app.config['SECRET_KEY'])
+
+    print(token)
     login_user(user)
     return redirect(url_for('index'))
 
