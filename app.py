@@ -4,7 +4,7 @@ from urllib.parse import urlencode
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, redirect, url_for, render_template, flash, session, \
+from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
     current_app, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
