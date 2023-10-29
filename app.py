@@ -49,8 +49,6 @@ app.config['OAUTH2_PROVIDERS'] = {
         'scopes': ['user:email'],
     },
 
-    # GitHub OAuth 2.0 documentation:
-    # https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
     'facebook': {
         'client_id': os.environ.get('FB_CLIENT_ID'),
         'client_secret': os.environ.get('FB_CLIENT_SECRET'),
@@ -91,6 +89,13 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+@app.route('/login_jwt', methods=['POST'])
+def login_jwt():
+    code = request.args.get("code")
+    # if not employee_is_valid(employee):
+    #     return jsonify({ 'error': 'Invalid employee properties.' }), 400
+    return '', 201, { 'accessToken': code }
 
 
 @app.route('/authorize/<provider>')
@@ -184,11 +189,10 @@ def oauth2_callback(provider):
         db.session.add(user)
         db.session.commit()
 
-    # log the user in
-
+    # generate JWT Token
     token = jwt.encode({
-        'public_id': user.email,
-        'exp' : datetime.utcnow() + timedelta(minutes = 30)
+        'email': user.email,
+        'exp' : datetime.utcnow() + timedelta(minutes = 5)
         }, app.config['SECRET_KEY'])
 
     print(token)
