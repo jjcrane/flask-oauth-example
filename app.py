@@ -1,6 +1,7 @@
 import os
 import secrets
 from urllib.parse import urlencode
+from pathlib import Path
 
 from dotenv import load_dotenv
 from flask import Flask, redirect, url_for, render_template, flash, session, \
@@ -10,7 +11,9 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 import requests
 
-load_dotenv()
+dotenv_path = Path('/opt/flask-oauth-example/env/.env)
+load_dotenv(dotenv_path=dotenv_path)
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
