@@ -56,7 +56,7 @@ app.config['OAUTH2_PROVIDERS'] = {
         'authorize_url': 'https://www.facebook.com/dialog/oauth',
         'token_url': 'https://graph.facebook.com/oauth/access_token',
         'userinfo': {
-            'url': 'https://api.github.com/user/emails',
+            'url': 'https://graph.facebook.com/me?fields=email',
             'email': lambda json: json[0]['email'],
         },
         'scopes': ['email'],
