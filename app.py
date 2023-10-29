@@ -173,7 +173,9 @@ def oauth2_callback(provider):
     })
     if response.status_code != 200:
         abort(401)
-    email = provider_data['userinfo']['email'](response.json())
+
+    print(response)
+    #email = provider_data['userinfo']['email'](response.json())
 
     # find or create the user in the database
     user = db.session.scalar(db.select(User).where(User.email == email))
