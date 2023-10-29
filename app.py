@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import jwt
 from dotenv import load_dotenv
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
-    current_app, request
+    current_app, request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
@@ -95,7 +95,7 @@ def login_jwt():
     code = request.args.get("code")
     # if not employee_is_valid(employee):
     #     return jsonify({ 'error': 'Invalid employee properties.' }), 400
-    return '', 200, { 'accessToken': code }
+    return jsonify({ 'accessToken': code}), 200
 
 
 @app.route('/authorize/<provider>')
