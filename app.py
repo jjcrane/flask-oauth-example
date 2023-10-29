@@ -95,7 +95,7 @@ def login_jwt():
     code = request.args.get("code")
     # if not employee_is_valid(employee):
     #     return jsonify({ 'error': 'Invalid employee properties.' }), 400
-    return '', 201, { 'accessToken': code }
+    return '', 200, { 'accessToken': code }
 
 
 @app.route('/authorize/<provider>')
