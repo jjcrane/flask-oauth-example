@@ -47,6 +47,20 @@ app.config['OAUTH2_PROVIDERS'] = {
         },
         'scopes': ['user:email'],
     },
+
+    # GitHub OAuth 2.0 documentation:
+    # https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps
+    'facebook': {
+        'client_id': os.environ.get('FB_CLIENT_ID'),
+        'client_secret': os.environ.get('FB_CLIENT_SECRET'),
+        'authorize_url': 'https://www.facebook.com/v18.0/dialog/oauth',
+        'token_url': 'https://graph.facebook.com/oauth/access_token',
+        'userinfo': {
+            'url': 'https://api.github.com/user/emails',
+            'email': lambda json: json[0]['email'],
+        },
+        'scopes': ['email'],
+    },
 }
 
 db = SQLAlchemy(app)

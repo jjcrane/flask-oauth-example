@@ -28,6 +28,7 @@
         <p>
           <a class="btn btn-primary" href="{{ url_for('oauth2_authorize', provider='google') }}">Login with Google</a>
           <a class="btn btn-primary" href="{{ url_for('oauth2_authorize', provider='github') }}">Login with GitHub</a>
+          <a class="btn btn-primary" href="{{ url_for('oauth2_authorize', provider='facebook') }}">Login with Facebook</a>
         </p>
       {% endif %}
     </div>
