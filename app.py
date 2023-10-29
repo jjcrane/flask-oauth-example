@@ -53,7 +53,7 @@ app.config['OAUTH2_PROVIDERS'] = {
     'facebook': {
         'client_id': os.environ.get('FB_CLIENT_ID'),
         'client_secret': os.environ.get('FB_CLIENT_SECRET'),
-        'authorize_url': 'https://www.facebook.com/v18.0/dialog/oauth',
+        'authorize_url': 'https://www.facebook.com/dialog/oauth',
         'token_url': 'https://graph.facebook.com/oauth/access_token',
         'userinfo': {
             'url': 'https://api.github.com/user/emails',
@@ -105,14 +105,22 @@ def oauth2_authorize(provider):
     session['oauth2_state'] = secrets.token_urlsafe(16)
 
     # create a query string with all the OAuth2 parameters
-    qs = urlencode({
-        'client_id': provider_data['client_id'],
-        'redirect_uri': url_for('oauth2_callback', provider=provider,
-                                _external=True),
-        'response_type': 'code',
-        'scope': ' '.join(provider_data['scopes']),
-        'state': session['oauth2_state'],
-    })
+    if provider == 'facebook':
+        qs = urlencode({
+            'client_id': provider_data['client_id'],
+            'redirect_uri': url_for('oauth2_callback', provider=provider,
+                                    _external=True),
+            'state': session['oauth2_state'],
+        })
+    else:
+            qs = urlencode({
+            'client_id': provider_data['client_id'],
+            'redirect_uri': url_for('oauth2_callback', provider=provider,
+                                    _external=True),
+            'response_type': 'code',
+            'scope': ' '.join(provider_data['scopes']),
+            'state': session['oauth2_state'],
+        })
 
     # redirect the user to the OAuth2 provider authorization URL
     return redirect(provider_data['authorize_url'] + '?' + qs)
