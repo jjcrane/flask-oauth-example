@@ -75,7 +75,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
-    token = db.Column(db.String(max), nullable=True)          
+    token = db.Column(db.String(2000), nullable=True)          
 
 
 @login.user_loader
