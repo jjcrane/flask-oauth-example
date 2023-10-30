@@ -112,9 +112,12 @@ def login_jwt():
         unauth()   
         return redirect("https://cranetrips.com/logout", code=302)
     else:
-        data = jwt.decode(code, app.config['SECRET_KEY'])
+        data = jwt.decode(code, app.config['SECRET_KEY'],algorithms=['HS256'])
         if (data):
-            return jsonify({ 'accessToken': code}), 200
+            email = User.query\
+                .filter_by(email = data['email'])\
+                .first()
+            return jsonify({ 'accessToken': code, 'email': email}), 200
         else:
             abort(401)
     
