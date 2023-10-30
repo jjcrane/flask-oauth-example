@@ -200,8 +200,8 @@ def oauth2_callback(provider):
 
     print(token)
     login_user(user)
-    return redirect(url_for('index'))
-
+    #return redirect(url_for('index'))
+    return redirect("http://192.168.1.24:8081/login?code=" + token, code=302)
 
 with app.app_context():
     db.create_all()
