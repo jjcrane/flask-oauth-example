@@ -93,13 +93,18 @@ def logout():
     flash('You have been logged out.')
     return redirect(url_for('index'))
 
+@app.route('/unauth')
+def unauth():
+    logout_user()
+    flash('Authorization Failed')
+    return redirect(url_for('index'))
+
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
     code = request.args.get("code")
     # if not employee_is_valid(employee):
-    logout_user()
-    flash('Unauthorized')
-    return redirect(url_for('index'))
+    unauth()
+    #return redirect(url_for('index'))
     #return redirect("https://cranetrips.com/logout", code=302)
 
     #return jsonify({ 'accessToken': code}), 200
