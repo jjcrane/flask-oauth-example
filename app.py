@@ -93,7 +93,7 @@ def logout():
     logout_user()
     flash('You have been logged out.')
     #return redirect(url_for('index'))
-    return redirect("http://192.168.1.24:8081/login", code=302)
+    return redirect("https://cranetrips.com/login", code=302)
 
 
 @app.route('/unauth')
@@ -110,7 +110,7 @@ def login_jwt():
     user = db.session.scalar(db.select(User).where(User.token == code))
     if user is None:
         unauth()   
-        return redirect("https://cranetrips.com/logout", code=302)
+        return redirect("https://identity.cranetrips.com/logout", code=302)
     else:
         data = jwt.decode(code, app.config['SECRET_KEY'],algorithms=['HS256'])
         if (data):
@@ -123,7 +123,7 @@ def login_jwt():
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
         #return redirect(url_for('index'))
-        return redirect("https://cranetrips.com/unauth", code=302)
+        return redirect("https://identity.cranetrips.com/unauth", code=302)
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
     if provider_data is None:
@@ -158,7 +158,7 @@ def oauth2_authorize(provider):
 def oauth2_callback(provider):
     if not current_user.is_anonymous:
         #return redirect(url_for('index'))
-        return redirect("http://192.168.1.24:8081/profile" + token, code=302)
+        return redirect("https://cranetrips.com/profile" + token, code=302)
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
     if provider_data is None:
@@ -223,7 +223,7 @@ def oauth2_callback(provider):
 
     login_user(user)
     #return redirect(url_for('index'))
-    return redirect("http://192.168.1.24:8081/login?code=" + token, code=302)
+    return redirect("https://cranetrips.com/login?code=" + token, code=302)
 
 with app.app_context():
     db.create_all()
