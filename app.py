@@ -75,7 +75,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
-
+    token = db.Column(db.String(max),Nullable=True)
 
 @login.user_loader
 def load_user(id):
