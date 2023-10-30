@@ -105,7 +105,7 @@ def login_jwt():
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
         # return redirect(url_for('index'))
-        return redirect("http://192.168.1.24:8081/profile" + token, code=302)
+        return redirect("http://192.168.1.24:8081/profile", code=302)
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
     if provider_data is None:
