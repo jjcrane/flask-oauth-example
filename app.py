@@ -211,7 +211,9 @@ def oauth2_callback(provider):
         'exp' : datetime.utcnow() + timedelta(minutes = 5)
         }, app.config['SECRET_KEY'])
 
-    print(token)
+    user.token = token
+    db.session.commit()
+
     login_user(user)
     #return redirect(url_for('index'))
     return redirect("http://192.168.1.24:8081/login?code=" + token, code=302)
