@@ -97,14 +97,15 @@ def logout():
 def login_jwt():
     code = request.args.get("code")
     # if not employee_is_valid(employee):
-    #     return jsonify({ 'error': 'Invalid employee properties.' }), 400
-    return jsonify({ 'accessToken': code}), 200
+    abort(401)
+    #return jsonify({ 'accessToken': code}), 200
 
 
 @app.route('/authorize/<provider>')
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
-        return redirect(url_for('index'))
+        # return redirect(url_for('index'))
+        return redirect("http://192.168.1.24:8081/profile" + token, code=302)
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
     if provider_data is None:
