@@ -104,7 +104,7 @@ def login_jwt():
     code = request.args.get("code")
     # if not employee_is_valid(employee):
     unauth()
-    #return redirect(url_for('index'))
+    return redirect(url_for('index'))
     #return redirect("https://cranetrips.com/logout", code=302)
 
     #return jsonify({ 'accessToken': code}), 200
