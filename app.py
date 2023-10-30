@@ -91,7 +91,8 @@ def index():
 def logout():
     logout_user()
     flash('You have been logged out.')
-    return redirect(url_for('index'))
+    #return redirect(url_for('index'))
+    return redirect("http://192.168.1.24:8081/logout", code=302)
 
 @app.route('/unauth')
 def unauth():
