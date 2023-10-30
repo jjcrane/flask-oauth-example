@@ -112,9 +112,13 @@ def login_jwt():
         unauth()   
         return redirect("https://cranetrips.com/logout", code=302)
     else:
-        return jsonify({ 'accessToken': code}), 200
+        data = jwt.decode(code, app.config['SECRET_KEY'])
+        if (data):
+            return jsonify({ 'accessToken': code}), 200
+        else:
+            abort(401)
     
-    
+
 @app.route('/authorize/<provider>')
 def oauth2_authorize(provider):
     if not current_user.is_anonymous:
