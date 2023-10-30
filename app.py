@@ -99,6 +99,7 @@ def login_jwt():
     # if not employee_is_valid(employee):
     logout_user()
     abort(401)
+    return redirect("https://cranetrips.com/logout", code=302)
     #return jsonify({ 'accessToken': code}), 200
 
 
