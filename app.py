@@ -158,7 +158,7 @@ def oauth2_authorize(provider):
 def oauth2_callback(provider):
     if not current_user.is_anonymous:
         #return redirect(url_for('index'))
-        return redirect("https://cranetrips.com/profile" + token, code=302)
+        return redirect("https://cranetrips.com" + token, code=302)
 
     provider_data = current_app.config['OAUTH2_PROVIDERS'].get(provider)
     if provider_data is None:
