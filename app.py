@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
     current_app, request,jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 import requests
@@ -67,6 +68,7 @@ app.config['OAUTH2_PROVIDERS'] = {
 }
 
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 login = LoginManager(app)
 login.login_view = 'index'
 
@@ -83,6 +85,13 @@ class Trip(db.Model):
     __tablename__ = 'trips'
     id = db.Column(db.Integer, primary_key=True)
     trip_name = db.Column(db.String(255), nullable=False)
+
+class TripSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Trip
+
+    id = ma.auto_field()
+    trip_name = ma.auto_field()
 
 class UserTrip(db.Model):
     __tablename__ = 'user_trips'
@@ -120,7 +129,8 @@ def unauth():
 def trips():
     trips = Trip.query.all()
     print (len(trips))
-    return jsonify(trips = Trip.serialize_list( trips ))
+
+    return TripSchema.dump(trips)
 
 
 @app.route('/login_jwt', methods=['POST'])
