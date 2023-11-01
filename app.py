@@ -77,6 +77,18 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), nullable=True)
     token = db.Column(db.String(2000), nullable=True)          
 
+class Trip(db.Model):
+    __tablename__ = 'trips'
+    id = db.Column(db.Integer, primary_key=True)
+    trip_name = db.Column(db.String(255), nullable=False)
+
+class UserTrip(db.Model):
+    __tablename__ = 'user_trips'
+    id = db.Column(db.Integer, primary_key=True)
+    ut_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    ut_trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
+    ut_deleted_date = db.Column(db.DateTime, db.ForeignKey('trips.id'),nullable=True)
+
 
 @login.user_loader
 def load_user(id):
