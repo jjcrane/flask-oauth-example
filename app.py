@@ -114,6 +114,12 @@ def unauth():
     flash('Authorization Failed')
     return redirect(url_for('index'))
 
+@app.route('/trips', methods = ['GET'])
+def trips():
+    trips = db.session.scalar(db.select(Trip))
+
+    return jsonify(trips)
+
 
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
