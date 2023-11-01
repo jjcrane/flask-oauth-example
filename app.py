@@ -87,7 +87,7 @@ class UserTrip(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ut_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     ut_trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
-    ut_deleted_date = db.Column(db.DateTime, db.ForeignKey('trips.id'),nullable=True)
+    ut_deleted_date = db.Column(db.DateTime,nullable=True)
 
 
 @login.user_loader
