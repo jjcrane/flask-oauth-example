@@ -20,13 +20,14 @@ load_dotenv(dotenv_path=dotenv_path)
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_URI')
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_URI')
+
 app.config['OAUTH2_PROVIDERS'] = {
     # Google OAuth 2.0 documentation:
     # https://developers.google.com/identity/protocols/oauth2/web-server#httprest
