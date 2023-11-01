@@ -215,7 +215,7 @@ def oauth2_callback(provider):
     # generate JWT Token
     token = jwt.encode({
         'email': user.email,
-        'exp' : datetime.utcnow() + timedelta(minutes = 5)
+        'exp' : datetime.utcnow() + timedelta(hours = 12)
         }, app.config['SECRET_KEY'])
 
     user.token = token
