@@ -20,6 +20,8 @@ load_dotenv(dotenv_path=dotenv_path)
 
 
 app = Flask(__name__)
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
@@ -67,8 +69,6 @@ app.config['OAUTH2_PROVIDERS'] = {
     },
 }
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
 login = LoginManager(app)
 login.login_view = 'index'
 
