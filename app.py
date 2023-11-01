@@ -12,6 +12,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user,\
     current_user
 import requests
 from flask_cors import CORS, cross_origin
+from dataclasses import dataclass
 
 dotenv_path = Path('/opt/flask-oauth-example/env/.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -77,6 +78,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), nullable=True)
     token = db.Column(db.String(2000), nullable=True)          
 
+@dataclass
 class Trip(db.Model):
     __tablename__ = 'trips'
     id = db.Column(db.Integer, primary_key=True)
@@ -116,8 +118,7 @@ def unauth():
 
 @app.route('/trips', methods = ['GET'])
 def trips():
-    trips = db.session.scalar(db.select(Trip))
-
+    trips = Trip.query.all()
     return jsonify(trips)
 
 
