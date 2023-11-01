@@ -120,7 +120,7 @@ def unauth():
 def trips():
     trips = Trip.query.all()
     print (len(trips))
-    return trips
+    return jsonify(trips)
 
 
 @app.route('/login_jwt', methods=['POST'])
