@@ -132,7 +132,7 @@ def trips():
     trips_schema = TripSchema()
     print (len(trips))
 
-    return trips_schema.dumps(trips)
+    return trips_schema.jsonify(trips)
 
 
 @app.route('/login_jwt', methods=['POST'])
