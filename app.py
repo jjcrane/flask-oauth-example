@@ -130,7 +130,7 @@ def unauth():
 def trips():
     trips = Trip.query.all()
     trips_schema = TripSchema()
-    print (len(trips))
+    print (len(trips.trip_name))
 
     return trips_schema.jsonify(trips)
 
