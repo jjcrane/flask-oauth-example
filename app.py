@@ -129,7 +129,7 @@ def unauth():
 @app.route('/trips', methods = ['GET'])
 def trips():
     trips = Trip.query.all()
-    trips_schema = TripSchema()
+    trips_schema = TripSchema(many=True)
     print (len(trips))
 
     return jsonify(trips_schema.dump(trips).data)
