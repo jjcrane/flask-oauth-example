@@ -119,6 +119,7 @@ def unauth():
 @app.route('/trips', methods = ['GET'])
 def trips():
     trips = Trip.query.all()
+    print (trips.count())
     return trips
 
 
