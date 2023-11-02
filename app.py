@@ -125,6 +125,26 @@ def trips():
 
     return jsonify(trips_schema.dump(trips))
 
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.args.get("username")
+    password = request.args.get("password")
+
+    user = db.session.scalar(db.select(User).where(User.username == username))
+    if user is None:
+        return 401
+    else:
+        if (user.password == password):
+            # generate JWT Token
+            token = jwt.encode({
+                'email': user.email,
+                'exp' : datetime.utcnow() + timedelta(hours = 12)
+                }, app.config['SECRET_KEY'])
+            
+            user.token = token
+            db.session.commit()
+            return 200
+        
 
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
