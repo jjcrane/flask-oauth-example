@@ -132,7 +132,8 @@ def login():
 
     user = db.session.scalar(db.select(User).where(User.username == username))
     if user is None:
-        return 401
+        resp = Response('', 401)
+        return resp
     else:
         if (user.password == password):
             # generate JWT Token
@@ -143,7 +144,8 @@ def login():
             
             user.token = token
             db.session.commit()
-            return 200
+            resp = Response('', 200)
+            return resp
         
 
 @app.route('/login_jwt', methods=['POST'])
