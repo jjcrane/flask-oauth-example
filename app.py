@@ -150,7 +150,7 @@ def signup():
     user = db.session.scalar(db.select(User).where(User.email == email))
     
     if user is None:
-        user = User(email=email,username=username,passowrd=password)
+        user = User(email=email,username=username,password=password)
         db.session.add(user)
         db.session.commit()
     else:
