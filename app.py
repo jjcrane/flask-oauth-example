@@ -162,7 +162,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         resp = Response('', 200)
-        return status.HTTP_201_CREATED
+        return resp
     else:
         abort(500)
 
