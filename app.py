@@ -150,11 +150,17 @@ def signup():
     user = db.session.scalar(db.select(User).where(User.email == email))
     
     if user is None:
-        user = User(email=email,username=username,password=password)
+
+        # generate JWT Token
+        token = jwt.encode({
+        'email': user.email,
+        'exp' : datetime.utcnow() + timedelta(hours = 12)
+        }, app.config['SECRET_KEY'])
+
+        user = User(email=email,username=username,password=password,token=token,oauth=False)
         db.session.add(user)
         db.session.commit()
-        resp = jsonify(success=True)
-        return resp
+        return redirect("https://cranetrips.com/login?code=" + token, code=302)
     else:
         abort(500)
 
@@ -247,7 +253,7 @@ def oauth2_callback(provider):
     # find or create the user in the database
     user = db.session.scalar(db.select(User).where(User.email == email))
     if user is None:
-        user = User(email=email, username=email.split('@')[0])
+        user = User(email=email, username=email.split('@')[0],oauth=True)
         db.session.add(user)
         db.session.commit()
 
