@@ -7,7 +7,7 @@ import jwt
 from dotenv import load_dotenv
 from flask_api import status
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
-    current_app, request,jsonify
+    current_app, request,jsonify,Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
@@ -161,6 +161,7 @@ def signup():
         user = User(email=email,username=username,password=password,token=token,oauth=False)
         db.session.add(user)
         db.session.commit()
+        resp = Response('', 200)
         return status.HTTP_201_CREATED
     else:
         abort(500)
