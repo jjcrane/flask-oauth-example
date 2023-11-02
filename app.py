@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import jwt
 from dotenv import load_dotenv
+from flask_api import status
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
     current_app, request,jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -160,8 +161,7 @@ def signup():
         user = User(email=email,username=username,password=password,token=token,oauth=False)
         db.session.add(user)
         db.session.commit()
-        resp = jsonify(success=True)
-        return resp
+        return status.HTTP_201_CREATED
     else:
         abort(500)
 
