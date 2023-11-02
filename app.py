@@ -153,7 +153,7 @@ def signup():
 
         # generate JWT Token
         token = jwt.encode({
-        'email': user.email,
+        'email': email,
         'exp' : datetime.utcnow() + timedelta(hours = 12)
         }, app.config['SECRET_KEY'])
 
