@@ -160,7 +160,8 @@ def signup():
         user = User(email=email,username=username,password=password,token=token,oauth=False)
         db.session.add(user)
         db.session.commit()
-        return redirect("https://cranetrips.com/login?code=" + token, code=302)
+        resp = jsonify(success=True)
+        return resp
     else:
         abort(500)
 
