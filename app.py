@@ -132,7 +132,7 @@ def login():
 
     user = db.session.scalar(db.select(User).where(User.username == username))
     if user is None:
-        resp = Response('', 401)
+        resp = Response('Unauthorized', 401)
         return resp
     else:
         if (user.password == password):
@@ -144,9 +144,7 @@ def login():
             
             user.token = token
             db.session.commit()
-            resp = Response('', 200)
-            return resp
-        
+            return jsonify({ 'accessToken': token}), 200        
 
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
