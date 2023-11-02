@@ -141,7 +141,7 @@ def login_jwt():
             abort(401)
 
 @app.route('/signup', methods=['POST'])
-def login_jwt():
+def signup():
 
     username = request.args.get("username")
     email = request.args.get("email")
