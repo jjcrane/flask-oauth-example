@@ -56,18 +56,6 @@ app.config['OAUTH2_PROVIDERS'] = {
         },
         'scopes': ['user:email'],
     },
-
-    'facebook': {
-        'client_id': os.environ.get('FB_CLIENT_ID'),
-        'client_secret': os.environ.get('FB_CLIENT_SECRET'),
-        'authorize_url': 'https://www.facebook.com/dialog/oauth',
-        'token_url': 'https://graph.facebook.com/oauth/access_token',
-        'userinfo': {
-            'url': 'https://graph.facebook.com/me?fields=email',
-            'email': lambda json: json['email'],
-        },
-        'scopes': ['email'],
-    },
 }
 
 login = LoginManager(app)
@@ -79,7 +67,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False)
     email = db.Column(db.String(64), nullable=True)
-    token = db.Column(db.String(2000), nullable=True)          
+    token = db.Column(db.String(2000), nullable=True)
+    oauth = db.Column(db.Boolean, nullable=False)
+    password = db.Column(db.String(256), nullable=True)          
 
 @dataclass
 class Trip(db.Model):
@@ -149,7 +139,22 @@ def login_jwt():
             return jsonify({ 'accessToken': code}), 200
         else:
             abort(401)
+
+@app.route('/signup', methods=['POST'])
+def login_jwt():
+
+    username = request.args.get("username")
+    email = request.args.get("email")
+    password = request.args.get("password")
     
+    user = db.session.scalar(db.select(User).where(User.email == email))
+    
+    if user is None:
+        user = User(email=email,username=username,passowrd=password)
+        db.session.add(user)
+        db.session.commit()
+    else:
+        abort(500)
 
 @app.route('/authorize/<provider>')
 def oauth2_authorize(provider):
