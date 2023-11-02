@@ -153,7 +153,8 @@ def signup():
         user = User(email=email,username=username,password=password)
         db.session.add(user)
         db.session.commit()
-        return 200
+        resp = jsonify(success=True)
+        return resp
     else:
         abort(500)
 
