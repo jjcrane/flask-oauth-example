@@ -162,7 +162,7 @@ def login():
     user = db.session.scalar(db.select(User).where(User.username == username))
 
     if user is None:
-        Response('Unauthorized', 401)
+        return Response('Unauthorized', 401)
     else:
         if (sha256_crypt.verify(password, user.password)):
             # generate JWT Token
@@ -174,7 +174,7 @@ def login():
             db.session.commit()
             return jsonify({ 'accessToken': token}), 200
         else:
-            Response('Unauthorized', 401)      
+            return Response('Unauthorized', 401)      
 
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
