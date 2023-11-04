@@ -99,8 +99,9 @@ def token_required(f):
     def decorator(*args, **kwargs):
         token = None
         # ensure the jwt-token is passed with the headers
-        if 'Bearer' in request.headers:
-            token = request.headers['Bearer']
+        if 'Authorization' in request.headers:
+            bearer = request.headers.get('Authorization')    # Bearer YourTokenHere
+            token = bearer.split()[1]  # YourTokenHere
         if not token: # throw error if no token provided
             return make_response(jsonify({"message": "A valid token is missing!"}), 401)
         try:
