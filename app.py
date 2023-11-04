@@ -16,7 +16,7 @@ import requests
 from flask_cors import CORS, cross_origin
 from dataclasses import dataclass
 from functools import wraps
-from passlib.hash import sha256_crypt
+from passlib.hash import sha256_crypt,pbkdf2_sha256
 
 dotenv_path = Path('/opt/flask-oauth-example/env/.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -29,6 +29,7 @@ ma = Marshmallow(app)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+hash = sha256_crypt.hash(app.config['SECRET_KEY'])
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
 app.config['OAUTH2_PROVIDERS'] = {
@@ -165,7 +166,7 @@ def login():
         resp = Response('Unauthorized', 401)
         return resp
     else:
-        if (sha256_crypt.verify(password, user.password)):
+        if (sha256_crypt.verify(password,hash) and sha256_crypt.verify(user.password,hash)):
             # generate JWT Token
             token = jwt.encode({
                 'email': user.email,
@@ -197,7 +198,7 @@ def signup():
     username = request.args.get("username")
     email = request.args.get("email")
 
-    password = sha256_crypt.encrypt(request.args.get("password"))
+    password = sha256_crypt.encrypt(request.args.get("password"),hash)
     
     user = db.session.scalar(db.select(User).where(User.email == email))
     
