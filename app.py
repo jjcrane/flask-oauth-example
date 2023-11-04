@@ -158,7 +158,8 @@ def trips():
 @app.route('/login', methods=['POST'])
 def login():
     username = request.args.get("username")
-    password = sha256_crypt.encrypt(request.args.get("password"),hash)
+    password = request.args.get("password")
+    password_hash = sha256_crypt.encrypt(password,hash)
 
     user = db.session.scalar(db.select(User).where(User.username == username))
 
@@ -166,7 +167,7 @@ def login():
         resp = Response('Unauthorized', 401)
         return resp
     else:
-        if (sha256_crypt.verify(password,hash) and sha256_crypt.verify(user.password,hash)):
+        if (sha256_crypt.verify(password_hash,hash) and sha256_crypt.verify(user.password,hash)):
             # generate JWT Token
             token = jwt.encode({
                 'email': user.email,
