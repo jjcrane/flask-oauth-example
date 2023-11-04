@@ -16,6 +16,7 @@ import requests
 from flask_cors import CORS, cross_origin
 from dataclasses import dataclass
 from functools import wraps
+from passlib.hash import sha256_crypt
 
 dotenv_path = Path('/opt/flask-oauth-example/env/.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -195,7 +196,8 @@ def signup():
 
     username = request.args.get("username")
     email = request.args.get("email")
-    password = request.args.get("password")
+    
+    password = sha256_crypt.encrypt(request.args.get("password"))
     
     user = db.session.scalar(db.select(User).where(User.email == email))
     
