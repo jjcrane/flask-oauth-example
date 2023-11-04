@@ -158,7 +158,7 @@ def trips():
 @app.route('/login', methods=['POST'])
 def login():
     username = request.args.get("username")
-    password = request.args.get("password")
+    password = sha256_crypt.encrypt(request.args.get("password"),hash)
 
     user = db.session.scalar(db.select(User).where(User.username == username))
 
