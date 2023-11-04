@@ -115,7 +115,7 @@ def token_required(f):
             print(ex)
             return make_response(jsonify({"message": "Invalid token!"}), 401)
          # Return the user information attached to the token
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
     return decorator
 
 @login.user_loader
