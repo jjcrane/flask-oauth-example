@@ -171,12 +171,12 @@ def login():
                 'email': user.email,
                 'exp' : datetime.utcnow() + timedelta(hours = 12)
                 }, app.config['SECRET_KEY'])
-        else:
-            resp = Response('Unauthorized', 401) 
-            
             user.token = token
             db.session.commit()
-            return jsonify({ 'accessToken': token}), 200        
+            return jsonify({ 'accessToken': token}), 200
+        else:
+            resp = Response('Unauthorized', 401)    
+            return resp     
 
 @app.route('/login_jwt', methods=['POST'])
 def login_jwt():
