@@ -7,7 +7,7 @@ import jwt
 from dotenv import load_dotenv
 from flask_api import status
 from flask import Flask, redirect, abort, url_for, render_template, flash, session, \
-    current_app, request,jsonify,Response
+    current_app, request,jsonify,Response,make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_login import LoginManager, UserMixin, login_user, logout_user,\
@@ -15,6 +15,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user,\
 import requests
 from flask_cors import CORS, cross_origin
 from dataclasses import dataclass
+from functools import wraps
 
 dotenv_path = Path('/opt/flask-oauth-example/env/.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -93,6 +94,25 @@ class UserTrip(db.Model):
     ut_deleted_date = db.Column(db.DateTime,nullable=True)
 
 
+def token_required(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):
+        token = None
+        # ensure the jwt-token is passed with the headers
+        if 'Bearer' in request.headers:
+            token = request.headers['Bearer']
+        if not token: # throw error if no token provided
+            return make_response(jsonify({"message": "A valid token is missing!"}), 401)
+        try:
+           # decode the token to obtain user public_id
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            current_user = User.query.filter_by(public_id=data['public_id']).first()
+        except:
+            return make_response(jsonify({"message": "Invalid token!"}), 401)
+         # Return the user information attached to the token
+        return f(current_user, *args, **kwargs)
+    return decorator
+
 @login.user_loader
 def load_user(id):
     return db.session.get(User, int(id))
@@ -131,6 +151,7 @@ def login():
     password = request.args.get("password")
 
     user = db.session.scalar(db.select(User).where(User.username == username))
+
     if user is None:
         resp = Response('Unauthorized', 401)
         return resp
