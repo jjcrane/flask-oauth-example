@@ -138,6 +138,7 @@ def unauth():
     return redirect(url_for('index'))
 
 @app.route('/trips', methods = ['GET'])
+@token_required
 def trips():
     trips = Trip.query.all()
     trips_schema = TripSchema(many=True)
