@@ -110,6 +110,7 @@ def token_required(f):
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             print(data)
             current_user = db.session.scalar(db.select(User).where(User.email == data['email']).first())
+            print(current_user)
         except:
             return make_response(jsonify({"message": "Invalid token!"}), 401)
          # Return the user information attached to the token
