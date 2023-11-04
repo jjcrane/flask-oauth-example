@@ -102,6 +102,7 @@ def token_required(f):
         if 'Authorization' in request.headers:
             bearer = request.headers.get('Authorization')    # Bearer YourTokenHere
             token = bearer.split()[1]  # YourTokenHere
+            print(token)
         if not token: # throw error if no token provided
             return make_response(jsonify({"message": "A valid token is missing!"}), 401)
         try:
