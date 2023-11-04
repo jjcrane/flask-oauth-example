@@ -171,6 +171,8 @@ def login():
                 'email': user.email,
                 'exp' : datetime.utcnow() + timedelta(hours = 12)
                 }, app.config['SECRET_KEY'])
+        else:
+            resp = Response('Unauthorized', 401) 
             
             user.token = token
             db.session.commit()
