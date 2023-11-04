@@ -159,8 +159,8 @@ def trips():
 def login():
     username = request.args.get("username")
     password = request.args.get("password")
-    password_hash = sha256_crypt.encrypt(password,hash)
-    print(password_hash)
+    #password_hash = sha256_crypt.encrypt(password,hash)
+    #print(password_hash)
 
     user = db.session.scalar(db.select(User).where(User.username == username))
 
