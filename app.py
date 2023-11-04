@@ -109,7 +109,7 @@ def token_required(f):
            # decode the token to obtain user public_id
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             print(data)
-            current_user = db.session.scalar(db.select(User).where(User.email == data['email']))
+            current_user = db.session.scalar(db.select(User).where(User.token == token))
             print(current_user)
         except Exception as ex:
             print(ex)
