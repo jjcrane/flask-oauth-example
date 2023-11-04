@@ -165,7 +165,7 @@ def login():
         resp = Response('Unauthorized', 401)
         return resp
     else:
-        if (user.password == sha256_crypt.verify(password, user.password)):
+        if (sha256_crypt.verify(password, user.password)):
             # generate JWT Token
             token = jwt.encode({
                 'email': user.email,
