@@ -115,7 +115,7 @@ class Lodging(db.Model):
 
 class LodgingSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = UserTrip
+        model = Lodging
     id = ma.auto_field()
     lodg_name = ma.auto_field()
     lodg_beds = ma.auto_field()
@@ -133,7 +133,7 @@ class trip_lodging(db.Model):
 
 class TripLodgingSchema(ma.SQLAlchemySchema):
     class Meta:
-        model = UserTrip
+        model = trip_lodging
     id = ma.auto_field()
     tl_trip_id = ma.auto_field()
     tl_lodge_id = ma.auto_field()
