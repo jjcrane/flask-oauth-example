@@ -83,10 +83,10 @@ class Trip(db.Model):
 class TripSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Trip
-
     id = ma.auto_field()
     trip_name = ma.auto_field()
 
+@dataclass
 class UserTrip(db.Model):
     __tablename__ = 'user_trips'
     id = db.Column(db.Integer, primary_key=True)
@@ -94,6 +94,50 @@ class UserTrip(db.Model):
     ut_trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
     ut_deleted_date = db.Column(db.DateTime,nullable=True)
 
+class UserTripSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = UserTrip
+    id = ma.auto_field()
+    ut_user_id = ma.auto_field()
+    ut_trip_id = ma.auto_field()
+    ut_deleted_date = ma.auto_field()
+
+
+@dataclass
+class Lodging(db.Model):
+    __tablename__ = 'lodging'
+    id = db.Column(db.Integer, primary_key=True)
+    lodg_name = db.Column(db.String(255), nullable=False)
+    lodg_beds = db.Column(db.Integer, nullable=False)
+    lodg_bedrooms = db.Column(db.Integer,nullable=False)
+    lodge_price_per_day = db.Column(db.Float,nullable=False)
+    lodge_link = db.Column(db.String(2000), nullable=True)
+
+class LodgingSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = UserTrip
+    id = ma.auto_field()
+    lodg_name = ma.auto_field()
+    lodg_beds = ma.auto_field()
+    lodg_bedrooms = ma.auto_field()
+    lodge_price_per_day = ma.auto_field()
+    lodge_link = ma.auto_field()
+
+@dataclass
+class trip_lodging(db.Model):
+    __tablename__ = 'trip_lodging'
+    id = db.Column(db.Integer, primary_key=True)
+    tl_trip_id = db.Column(db.Integer, db.ForeignKey('trips.id'), nullable=False)
+    tl_lodge_id = db.Column(db.Integer, db.ForeignKey('lodging.id'), nullable=False)
+    tl_deleted_date = db.Column(db.DateTime,nullable=True)
+
+class TripLodgingSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = UserTrip
+    id = ma.auto_field()
+    tl_trip_id = ma.auto_field()
+    tl_lodge_id = ma.auto_field()
+    tl_deleted_date = ma.auto_field()
 
 def token_required(f):
     @wraps(f)
@@ -117,14 +161,8 @@ def token_required(f):
         except Exception as ex:
             print(ex)
             return make_response(jsonify({"message": "Invalid token!"}), 401)
-         # Return the user information attached to the token
         return f(*args, **kwargs)
     return decorator
-
-@login.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
-
 
 @app.route('/')
 def index():
@@ -153,6 +191,15 @@ def trips():
     print (len(trips))
 
     return jsonify(trips_schema.dump(trips))
+
+@app.route('/lodging', methods = ['GET'])
+@token_required
+def trips():
+    lodging = Lodging.query.all()
+    LodgingSchema = LodgingSchema(many=True)
+    print (len(lodging))
+
+    return jsonify(LodgingSchema.dump(lodging))
 
 @app.route('/login', methods=['POST'])
 def login():
