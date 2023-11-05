@@ -194,7 +194,7 @@ def trips():
 
 @app.route('/lodging', methods = ['GET'])
 @token_required
-def trips():
+def lodging():
     lodging = Lodging.query.all()
     LodgingSchema = LodgingSchema(many=True)
     print (len(lodging))
